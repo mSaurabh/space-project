@@ -42,4 +42,6 @@ app.use("/launches", launchesRouter);
 app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "public", "index.html"));
 });
+
+//NOTE This is used in our supertest while writing test cases
 module.exports = app;
