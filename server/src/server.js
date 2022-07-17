@@ -19,7 +19,7 @@ mongoose.connection.on("error", (err) => {
 });
 
 const server = http.createServer(app);
-const mongooseOptions = mongoose.ConnecO;
+
 async function startServer() {
   await mongoose.connect(MONGO_URL);
   await loadPlanetsData();

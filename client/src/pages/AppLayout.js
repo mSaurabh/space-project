@@ -46,7 +46,7 @@ const AppLayout = (props) => {
   );
 
   const planets = usePlanets();
-  console.log("planets", planets);
+  // console.log("planets", planets);
 
   return (
     <div className={classes.content}>

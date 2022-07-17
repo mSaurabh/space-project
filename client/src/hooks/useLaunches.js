@@ -31,7 +31,7 @@ function useLaunches(onSuccessSound, onAbortSound, onFailureSound) {
         target
       });
 
-      console.log("Submit Launch response is ", JSON.stringify(response));
+      // console.log("Submit Launch response is ", JSON.stringify(response));
 
       const success = response.ok;
       if (success) {

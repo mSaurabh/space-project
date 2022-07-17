@@ -33,12 +33,14 @@ app.use(express.json());
  */
 //NOTE This command uses the public folder (the build script)
 app.use(express.static(path.join(__dirname, "..", "public")));
-app.use("/planets", planetsRouter);
+
 //NOTE This means that launchesRouter will only react to the /launches route
+//     & planetsRouter will only react to /planets route
 app.use("/launches", launchesRouter);
+app.use("/planets", planetsRouter);
 
 //NOTE Done so that once the app loads we are going directly to launch page.
-//     Check out the video titled "Serving React.js Front End In Production" for details.
+//NOTE Check out the video titled "Serving React.js Front End In Production" for details.
 app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "public", "index.html"));
 });

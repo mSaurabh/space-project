@@ -1,7 +1,6 @@
 const launchesDatabase = require("./launches.mongo");
 const planets = require("./planets.mongo");
 
-const launches = new Map();
 const DEFAULT_FLIGHT_NUMBER = 100;
 
 const launch = {
@@ -38,7 +37,13 @@ async function saveLaunch(launch) {
   if (!planet) {
     throw new Error("No Matching Planet Found!");
   }
-  await launchesDatabase.updateOne(
+
+  //NOTE replacing updateOne with findOneAndUpdate method
+  //     to avoid $setOnInsert property being set.
+  //NOTE findOneAndUpdate returns only the properties we
+  //     set in our update.
+  //await launchesDatabase.updateOne(
+  await launchesDatabase.findOneAndUpdate(
     { flightNumber: launch.flightNumber },
     launch,
     {
@@ -47,34 +52,40 @@ async function saveLaunch(launch) {
   );
 }
 
-function addNewLaunch(launch) {
-  latestFlightNumber++;
-  launchesDatabase.set(
-    latestFlightNumber,
-    Object.assign(launch, {
-      flightNumber: latestFlightNumber,
-      customers: ["ZTM", "NASA"],
-      upcoming: true,
-      success: true
-    })
+async function scheduleNewLaunch(launch) {
+  const newFlightNumber = (await getLatestFlightNumber()) + 1;
+  const newLaunch = Object.assign(launch, {
+    success: true,
+    upcoming: true,
+    customers: ["ZTM", "NASA"],
+    flightNumber: newFlightNumber
+  });
+
+  await saveLaunch(newLaunch);
+}
+
+async function existsLaunchWithId(launchId) {
+  return await launchesDatabase.findOne({ flightNumber: launchId });
+}
+
+async function abortLaunchById(launchId) {
+  const aborted = await launchesDatabase.updateOne(
+    { flightNumber: launchId },
+    { upcoming: false, success: false }
   );
-}
 
-function existsLaunchWithId(launchId) {
-  return launchesDatabase.has(Number(launchId));
-}
-
-function abortLaunchById(launchId) {
-  const aborted = launchesDatabase.get(Number(launchId));
-  //NOTE Even though aborted is constant we cannot reassign it, we can mutate its properties by reassigning
-  aborted.upcoming = false;
-  aborted.success = false;
-  return aborted;
+  return aborted.acknowledged === true && aborted.modifiedCount === 1;
+  // const aborted = launchesDatabase.(Number(launchId));
+  // //NOTE Even though aborted is constant we cannot reassign it, we can mutate its properties by reassigning
+  // aborted.upcoming = false;
+  // aborted.success = false;
+  // return aborted;
 }
 
 module.exports = {
   getAllLaunches,
-  addNewLaunch,
+  // addNewLaunch,
   existsLaunchWithId,
-  abortLaunchById
+  abortLaunchById,
+  scheduleNewLaunch
 };
