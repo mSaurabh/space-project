@@ -1,10 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
-const planetsRouter = require("./routes/planets/planets.router");
-const launchesRouter = require("./routes/launches/launches.router");
 const morgan = require("morgan");
-
+const api = require("./routes/api");
 const app = express();
 
 app.use(
@@ -22,7 +20,6 @@ app.use(
 //
 
 app.use(morgan("combined"));
-
 app.use(express.json());
 
 /*
@@ -34,10 +31,11 @@ app.use(express.json());
 //NOTE This command uses the public folder (the build script)
 app.use(express.static(path.join(__dirname, "..", "public")));
 
-//NOTE This means that launchesRouter will only react to the /launches route
-//     & planetsRouter will only react to /planets route
-app.use("/launches", launchesRouter);
-app.use("/planets", planetsRouter);
+//NOTE This is how you do Node API versioning.
+//TODO Update your POSTMAN endpoints accordingly
+app.use("/v1", api);
+
+//EX: app.use("/v2",v2Router);
 
 //NOTE Done so that once the app loads we are going directly to launch page.
 //NOTE Check out the video titled "Serving React.js Front End In Production" for details.
