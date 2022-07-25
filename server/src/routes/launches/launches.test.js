@@ -4,8 +4,8 @@ const { mongoConnect, mongoDisconnect } = require("../../services/mongo");
 
 describe("Launches API", () => {
   //NOTE This runs once before all tests run
-  beforeAll(async () => {
-    await mongoConnect();
+  beforeAll(() => {
+    mongoConnect();
   });
 
   afterAll(async () => {

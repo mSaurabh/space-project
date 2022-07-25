@@ -5,19 +5,22 @@ const axios = require("axios");
 const DEFAULT_FLIGHT_NUMBER = 100;
 const SPACEX_API_URL = "https://api.spacexdata.com/v4/launches/query";
 
-const launch = {
-  flightNumber: 100, //flight_number
-  mission: "Kepler Exploration X", //name
-  rocket: "Explorer IS1", // rocket.name
-  launchData: new Date("December 27, 2030"), //date_local
-  target: "Kepler-442 b", //not applicable
-  customers: ["ZTM", "NASA"], // payload.customers for each payload
-  upcoming: true, //upcoming
-  success: true //success
-};
-
-// launches.set(launch.flightNumber, launch);
-saveLaunch(launch);
+/** //NOTE No londer need this hardcoded data, since we have a real life data
+ * coming from spaceX
+ *
+ * const launch = {
+ * flightNumber: 100, //flight_number
+ * mission: "Kepler Exploration X", //name
+ * rocket: "Explorer IS1", // rocket.name
+ * launchData: new Date("December 27, 2030"), //date_local
+ * target: "Kepler-442 b", //not applicable
+ * customers: ["ZTM", "NASA"], // payload.customers for each payload
+ * upcoming: true, //upcoming
+ * success: true //success
+ * };
+ * launches.set(launch.flightNumber, launch);
+ * saveLaunch(launch);
+ * */
 
 async function populateLaunches() {
   const response = await axios.post(SPACEX_API_URL, {
@@ -57,7 +60,7 @@ async function populateLaunches() {
       flightNumber: launchDoc.flight_number,
       mission: launchDoc.name,
       rocket: launchDoc.rocket.name,
-      launchData: launchDoc.date_local,
+      launchDate: launchDoc.date_local,
       upcoming: launchDoc.upcoming,
       success: launchDoc.success,
       customers
@@ -101,6 +104,7 @@ async function getAllLaunches(skip, limit) {
   // return Array.from(launchesDatabase.values());
   return await launchesDatabase
     .find({}, { _id: 0, __v: 0 })
+    .sort({ flightNumber: "asc" })
     .skip(skip)
     .limit(limit);
 }

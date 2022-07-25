@@ -1,3 +1,5 @@
+//NOTE: DOTENV is always the first one we need to load since it will be used in subsequent files
+require("dotenv").config();
 const http = require("http");
 const { mongoConnect } = require("./services/mongo");
 const app = require("./app");
