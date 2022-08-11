@@ -1,0 +1,21 @@
+name: SPACE Project CI
+on:
+  # Workflow will be triggered when code is pushed to one of the branches below
+  push:
+    branches: ["master"]
+  # Workflow will be triggered when there is a pull request on master branch
+  pull_request:
+    branches: ["master"]
+# this job will be run when either one of the above trigger is detected
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js version 16
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+      - run: npm install
+      - run: npm run build --prefix client
+      
