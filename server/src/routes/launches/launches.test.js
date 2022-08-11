@@ -1,11 +1,13 @@
 const request = require("supertest");
 const app = require("../../app");
+const { loadPlanetsData } = require("../../models/planets.model");
 const { mongoConnect, mongoDisconnect } = require("../../services/mongo");
 
 describe("Launches API", () => {
   //NOTE This runs once before all tests run
-  beforeAll(() => {
+  beforeAll(async () => {
     mongoConnect();
+    await loadPlanetsData();
   });
 
   afterAll(async () => {
