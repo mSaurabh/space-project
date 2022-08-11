@@ -13,9 +13,11 @@ jobs:
     # & by default the create react app test scripts run in CI and it disables watch mode 
     env:
       CI: true
+      MONGO_URL: mongodb://localhost/nasa
     strategy:
       matrix: 
         node-version: [14.x, 16.x]
+        mongodb-version: ["4.4"]
     # runtime env for our CI pipeline
     runs-on: ubuntu-latest
     steps:
@@ -24,6 +26,10 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
+      - name: MongoDB in GitHub Actions
+        uses: supercharge/mongodb-github-action@1.6.0
+        with:
+          mongodb-version: ${{ matrix.mongodb-version }}
       - run: npm install
       - run: npm run build --prefix client
       - run: npm test
