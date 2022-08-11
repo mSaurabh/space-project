@@ -10,12 +10,12 @@ on:
 jobs:
   build:
     # This is the env that all the below steps will run inside of
-    # & by default the create react app test scripts run in CI and it disables watch mode 
+    # & by default the create react app test scripts run in CI and it disables watch mode
     env:
       CI: true
       MONGO_URL: mongodb://localhost/nasa
     strategy:
-      matrix: 
+      matrix:
         node-version: [14.x, 16.x]
         mongodb-version: ["4.4"]
     # runtime env for our CI pipeline
