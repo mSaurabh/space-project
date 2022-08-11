@@ -9,13 +9,21 @@ on:
 # this job will be run when either one of the above trigger is detected
 jobs:
   build:
+    # This is the env that all the below steps will run inside of
+    # & by default the create react app test scripts run in CI and it disables watch mode 
+    env:
+      CI: true
+    strategy:
+      matrix: 
+        node-version: [14.x, 16.x]
+    # runtime env for our CI pipeline
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js version 16
+      - name: Use Node.js version ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
-          node-version: "16"
+          node-version: ${{ matrix.node-version }}
       - run: npm install
       - run: npm run build --prefix client
-      
+      - run: npm test
