@@ -8,10 +8,15 @@ COPY package*.json ./
 
 # --only=production only installs prd dep and skips dev dependencies
 COPY client/package*.json client/
-RUN npm install-client --only=production
+#NOTE --only=production flag no longer works for npm > v8.4
+#RUN npm install-client --only=production
+RUN npm run install-client --omit=dev
+
 
 COPY server/package*.json server/
-RUN npm install-server --only=production
+#NOTE --only=production flag no longer works for npm > v8.4
+#RUN npm install-server --only=production
+RUN npm run install-server --omit=dev
 
 COPY client/ client/
 RUN npm run build --prefix client
