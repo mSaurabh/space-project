@@ -1,5 +1,10 @@
 // Load planets and return as JSON.
-const API_URL = "http://localhost:8000/v1";
+
+//NOTE We change this to just v1 becuase both client and server are on same node server
+//     and hence this change will work for both localhost and production url
+// const API_URL = "http://localhost:8000/v1";
+const API_URL = "v1";
+
 async function httpGetPlanets() {
   const response = await fetch(`${API_URL}/planets`);
   return await response.json();
