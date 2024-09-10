@@ -1,6 +1,6 @@
 import { Frame, withSounds, withStyles } from "arwes";
 import { useState } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Centered from "../components/Centered";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
@@ -60,7 +60,7 @@ const AppLayout = (props) => {
         >
           {(anim) => (
             <div style={{ padding: "20px" }}>
-              <Switch>
+              <Routes>
                 <Route exact path="/">
                   <Launch
                     entered={anim.entered}
@@ -87,7 +87,7 @@ const AppLayout = (props) => {
                 <Route exact path="/history">
                   <History entered={anim.entered} launches={launches} />
                 </Route>
-              </Switch>
+              </Routes>
             </div>
           )}
         </Frame>
